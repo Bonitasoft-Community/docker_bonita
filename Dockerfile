@@ -46,8 +46,8 @@ RUN wget -q ${BASE_URL}/${BONITA_ARCHIVE_FILE} -O /opt/files/${BONITA_ARCHIVE_FI
 VOLUME /opt/bonita
 
 # create user to launch Bonita BPM as non-root
-RUN groupadd -r bonita -g 222 \
-  && useradd -u 222 -r -g bonita -d /opt/bonita/ -s /sbin/nologin -c "Bonita User" bonita
+RUN groupadd -r bonita -g 1000 \
+  && useradd -u 1000 -r -g bonita -d /opt/bonita/ -s /sbin/nologin -c "Bonita User" bonita
 
 # expose Tomcat port
 EXPOSE 8080
