@@ -81,7 +81,7 @@ fi
 
 # apply conf
 # copy templates
-cp ${BONITA_TPL}/bonita-platform-community-custom.properties ${BONITA_PATH}/${BONITA_ARCHIVE_DIR}/bonita/engine-server/conf/bonita-platform-community-custom.properties
+cp ${BONITA_TPL}/bonita-platform-community-custom.properties ${BONITA_PATH}/${BONITA_ARCHIVE_DIR}/bonita/engine-server/conf/platform/bonita-platform-community-custom.properties
 cp ${BONITA_TPL}/bonita-tenant-community-custom.properties ${BONITA_PATH}/${BONITA_ARCHIVE_DIR}/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties
 cp ${BONITA_TPL}/platform-tenant-config.properties ${BONITA_PATH}/${BONITA_ARCHIVE_DIR}/bonita/client/platform/conf/platform-tenant-config.properties
 cp ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/${BONITA_ARCHIVE_DIR}/bin/setenv.sh
