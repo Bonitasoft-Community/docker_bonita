@@ -14,11 +14,8 @@ ENV MYSQL_JDBC_DRIVER_NAME mysql-connector-java-5.1.26
 ENV MYSQL_JDBC_DRIVER_URL http://dev.mysql.com/get/Downloads/Connector-J/${MYSQL_JDBC_DRIVER_NAME}.zip
 ENV MYSQL_JDBC_DRIVER_FILE ${MYSQL_JDBC_DRIVER_NAME}-bin.jar
 
-# avoid debconf messages
-ENV DEBIAN_FRONTEND noninteractive
-
-# install packages
-RUN apt-get update && apt-get install -y \
+# avoid debconf messages and install packages
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get install -y \
   mysql-client-core-5.5 \
   openjdk-7-jre-headless \
   postgresql-client \
