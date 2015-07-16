@@ -25,7 +25,7 @@ function create_user_if_not_exists {
 			fi
 			;;
 		postgres)
-			export PGPASSWORD=$POSTGRES_ENV_POSTGRES_PASSWORD
+			export PGPASSWORD=$db_admin_pass
 			# check if the user exists
 			psql -U $db_admin_user -h $db_host -p $db_port -d postgres -t -A -c "SELECT 1 FROM pg_roles WHERE rolname='${db_user}'" | grep -q 1
 			# if the user is not present, create it
