@@ -43,8 +43,7 @@ RUN mkdir /opt/custom-init.d/
 
 # create user to launch Bonita BPM as non-root
 RUN groupadd -r bonita -g 1000 \
-  && useradd -u 1000 -r -g bonita -d /opt/bonita/ -s /sbin/nologin -c "Bonita User" bonita \
-  && chown -R bonita:bonita /opt/files /opt/templates
+  && useradd -u 1000 -r -g bonita -d /opt/bonita/ -s /sbin/nologin -c "Bonita User" bonita
 
 # expose Tomcat port
 EXPOSE 8080
