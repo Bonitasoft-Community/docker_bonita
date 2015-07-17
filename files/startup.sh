@@ -9,5 +9,12 @@ if [ ! -f /opt/${BONITA_VERSION}-configured ]
 then
 	sudo -u bonita --preserve-env /opt/files/config.sh && touch /opt/${BONITA_VERSION}-configured || exit 1
 fi
+if [ -d /opt/custom-init.d/ ]
+then
+	for f in /opt/custom-init.d/*.sh
+	do
+		[ -f "$f" ] && . "$f"
+	done
+fi
 # launch tomcat
 exec sudo -u bonita /opt/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bin/catalina.sh run

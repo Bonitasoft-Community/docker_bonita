@@ -39,6 +39,8 @@ RUN wget -q http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VER
 # create Volume to store Bonita BPM files
 VOLUME /opt/bonita
 
+RUN mkdir /opt/custom-init.d/
+
 # create user to launch Bonita BPM as non-root
 RUN groupadd -r bonita -g 1000 \
   && useradd -u 1000 -r -g bonita -d /opt/bonita/ -s /sbin/nologin -c "Bonita User" bonita \

@@ -75,7 +75,7 @@ then
 			DB_ADMIN_USER=${DB_ADMIN_USER:-root}
 			if [ -z "$DB_ADMIN_PASS" ]
 			then
-				DB_ADMIN_PASS=${MYSQL_ENV_MYSQL_ROOT_PASSWORD}
+				DB_ADMIN_PASS=$MYSQL_ENV_MYSQL_ROOT_PASSWORD
 			fi
 			;;
 		postgres)
