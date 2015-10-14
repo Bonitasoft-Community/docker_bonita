@@ -18,6 +18,14 @@ RUN mkdir /opt/custom-init.d/
 RUN groupadd -r bonita -g 1000 \
   && useradd -u 1000 -r -g bonita -d /opt/bonita/ -s /sbin/nologin -c "Bonita User" bonita
 
+# grab gosu
+RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+RUN wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --print-architecture)" -O /usr/local/bin/gosu \
+  && wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --print-architecture).asc" -O /usr/local/bin/gosu.asc \
+  && gpg --verify /usr/local/bin/gosu.asc \
+  && rm /usr/local/bin/gosu.asc \
+  && chmod +x /usr/local/bin/gosu
+
 ENV BONITA_VERSION 7.0.1
 ENV BONITA_SHA256 1f26f6f219d860dcb268c795a2b0e11961bd8257e138de0337ae8c6c0ba68309
 ENV POSTGRES_JDBC_DRIVER postgresql-9.3-1102.jdbc41.jar
