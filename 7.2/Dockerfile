@@ -26,8 +26,9 @@ RUN wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
 
-ENV BONITA_VERSION 7.2.0-SNAPSHOT
-ENV BONITA_SHA256 ad91e44c2d77b8cc049eeeef5d2fbac83024e0fa507c582003323f0e67bc8640
+ENV BONITA_VERSION 7.2.1
+ENV TOMCAT_VERSION 7.0.67
+ENV BONITA_SHA256 365e8eacffa6bba4ae74bf5348a40a2631386b7102c57657f9ba8459b7285328
 ENV POSTGRES_JDBC_DRIVER postgresql-9.3-1102.jdbc41.jar
 ENV POSTGRES_SHA256 b78749d536da75c382d0a71c717cde6850df64e16594676fc7cacb5a74541d66
 ENV MYSQL_JDBC_DRIVER mysql-connector-java-5.1.26
@@ -45,9 +46,8 @@ RUN mkdir /opt/files \
   && rm /opt/files/${MYSQL_JDBC_DRIVER}.zip
 
 # add Bonita BPM archive to the container
-COPY files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55.zip /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55.zip
-#RUN wget -q http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55.zip -O /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55.zip \
-#  && echo "$BONITA_SHA256" /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55.zip | sha256sum -c -
+RUN wget -q http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip -O /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip \
+  && echo "$BONITA_SHA256" /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip | sha256sum -c -
 
 # create Volume to store Bonita BPM files
 VOLUME /opt/bonita

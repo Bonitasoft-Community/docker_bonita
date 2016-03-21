@@ -61,9 +61,9 @@ PLATFORM_PASSWORD=${PLATFORM_PASSWORD:-platform}
 TENANT_LOGIN=${TENANT_LOGIN:-install}
 TENANT_PASSWORD=${TENANT_PASSWORD:-install}
 
-if [ ! -d ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55 ]
+if [ ! -d ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION} ]
 then
-        unzip -q ${BONITA_FILES}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55.zip -d ${BONITA_PATH}
+        unzip -q ${BONITA_FILES}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip -d ${BONITA_PATH}
 fi
 
 if [ "${ENSURE_DB_CHECK_AND_CREATION}" = 'true' ]
@@ -99,39 +99,39 @@ fi
 
 # apply conf
 # copy templates
-cp  ${BONITA_TPL}/bonita-platform-community-custom.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/engine-server/conf/platform/bonita-platform-community-custom.properties
-cp  ${BONITA_TPL}/bonita-tenant-community-custom.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties
-cp  ${BONITA_TPL}/platform-tenant-config.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/client/platform/conf/platform-tenant-config.properties
-cp  ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bin/setenv.sh
+cp  ${BONITA_TPL}/bonita-platform-community-custom.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/engine-server/conf/platform/bonita-platform-community-custom.properties
+cp  ${BONITA_TPL}/bonita-tenant-community-custom.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties
+cp  ${BONITA_TPL}/platform-tenant-config.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/client/platform/conf/platform-tenant-config.properties
+cp  ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
 
 # if required, uncomment dynamic checks on REST API
 if [ "$REST_API_DYN_AUTH_CHECKS" = 'true' ]
 then
-    sed -i -e 's/^#GET|/GET|/' -e 's/^#POST|/POST|/' -e 's/^#PUT|/PUT|/' -e 's/^#DELETE|/DELETE|/' ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/client/platform/tenant-template/conf/dynamic-permissions-checks.properties
+    sed -i -e 's/^#GET|/GET|/' -e 's/^#POST|/POST|/' -e 's/^#PUT|/PUT|/' -e 's/^#DELETE|/DELETE|/' ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/client/platform/tenant-template/conf/dynamic-permissions-checks.properties
 fi
 # if required, deactivate HTTP API by updating bonita.war with proper web.xml
 if [ "$HTTP_API" = 'false' ]
 then
     cd ${BONITA_FILES}/
-    zip ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/webapps/bonita.war WEB-INF/web.xml
+    zip ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/webapps/bonita.war WEB-INF/web.xml
 fi
 
 # replace variables
 sed -e 's/{{TENANT_LOGIN}}/'"${TENANT_LOGIN}"'/' \
     -e 's/{{TENANT_PASSWORD}}/'"${TENANT_PASSWORD}"'/' \
-    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties \
-       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/client/platform/conf/platform-tenant-config.properties
+    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties \
+       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/client/platform/conf/platform-tenant-config.properties
 sed -e 's/{{PLATFORM_LOGIN}}/'"${PLATFORM_LOGIN}"'/' \
     -e 's/{{PLATFORM_PASSWORD}}/'"${PLATFORM_PASSWORD}"'/' \
-    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/engine-server/conf/platform/bonita-platform-community-custom.properties
-sed 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bin/setenv.sh
-sed 's/{{JAVA_OPTS}}/'"${JAVA_OPTS}"'/' -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bin/setenv.sh
+    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/engine-server/conf/platform/bonita-platform-community-custom.properties
+sed 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
+sed 's/{{JAVA_OPTS}}/'"${JAVA_OPTS}"'/' -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
 sed -e 's/{{BIZ_DB_VENDOR}}/'"${BIZ_DB_VENDOR}"'/' \
-    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties
+    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bonita/engine-server/conf/tenants/template/bonita-tenant-community-custom.properties
 case "${DB_VENDOR}" in
 	mysql|postgres)
-		cp  ${BONITA_TPL}/${DB_VENDOR}/bitronix-resources.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/conf/bitronix-resources.properties
-		cp  ${BONITA_TPL}/${DB_VENDOR}/bonita.xml ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/conf/Catalina/localhost/bonita.xml
+		cp  ${BONITA_TPL}/${DB_VENDOR}/bitronix-resources.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties
+		cp  ${BONITA_TPL}/${DB_VENDOR}/bonita.xml ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
 		sed -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
 		    -e 's/{{DB_PASS}}/'"${DB_PASS}"'/' \
 		    -e 's/{{DB_NAME}}/'"${DB_NAME}"'/' \
@@ -140,14 +140,14 @@ case "${DB_VENDOR}" in
 		    -e 's/{{BIZ_DB_USER}}/'"${BIZ_DB_USER}"'/' \
 		    -e 's/{{BIZ_DB_PASS}}/'"${BIZ_DB_PASS}"'/' \
 		    -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
-		    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/conf/bitronix-resources.properties \
-		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/conf/Catalina/localhost/bonita.xml
+		    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties \
+		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
 
 		# if not present, copy JDBC driver into the Bundle
 		file=$(basename $JDBC_DRIVER)
-		if [ ! -e ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/lib/bonita/$file ]
+		if [ ! -e ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/$file ]
 		then
-			cp  ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/lib/bonita/
+			cp  ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/
 		fi
 		;;
 esac

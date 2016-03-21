@@ -17,4 +17,4 @@ then
 	done
 fi
 # launch tomcat
-exec gosu bonita /opt/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-7.0.55/bin/catalina.sh run
+exec gosu bonita /opt/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/catalina.sh run
