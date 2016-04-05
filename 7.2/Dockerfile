@@ -2,7 +2,7 @@ FROM ubuntu:14.04
 
 MAINTAINER Jérémy Jacquier-Roux <jeremy.jacquier-roux@bonitasoft.org>
 
-# avoid debconf messages and install packages
+# install packages
 RUN apt-get update && apt-get install -y \
   mysql-client-core-5.5 \
   openjdk-7-jre-headless \
