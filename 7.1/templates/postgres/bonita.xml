@@ -24,6 +24,9 @@
               driverClassName="org.postgresql.Driver" 
               url="jdbc:postgresql://{{DB_HOST}}:{{DB_PORT}}/{{DB_NAME}}"/>
 
+    <Resource name="BusinessDataDS" auth="Container" type="javax.sql.DataSource"
+        factory="bitronix.tm.resource.ResourceObjectFactory" uniqueName="jdbc/BusinessDataDSXA" />
+
     <Resource name="NotManagedBizDataDS"  
               auth="Container"  
               type="javax.sql.DataSource" 

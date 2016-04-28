@@ -24,6 +24,9 @@
               driverClassName="com.mysql.jdbc.Driver" 
               url="jdbc:mysql://{{DB_HOST}}:{{DB_PORT}}/{{DB_NAME}}?dontTrackOpenResources=true&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
 
+    <Resource name="BusinessDataDS" auth="Container" type="javax.sql.DataSource"
+        factory="bitronix.tm.resource.ResourceObjectFactory" uniqueName="jdbc/BusinessDataDSXA" />
+
     <Resource name="NotManagedBizDataDS"  
               auth="Container"  
               type="javax.sql.DataSource" 
