@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+
+	<!--  To not persist the session after reboot tomcat -->
+	<Manager pathname="" />
+	
+    <!-- Configure Datasource for Bonita BPM standard database -->       
+	<Resource name="bonitaDS" auth="Container" type="javax.sql.DataSource"
+        factory="bitronix.tm.resource.ResourceObjectFactory" uniqueName="jdbc/bonitaDSXA" />
+
+    <Resource name="bonitaSequenceManagerDS"  
+              auth="Container"  
+              type="javax.sql.DataSource" 
+              maxActive="17"  
+              minIdle="5"  
+              maxWait="10000"  
+              initialSize="3" 
+              validationQuery="SELECT 1"
+              validationInterval="30000"
+              removeAbandoned="true" 
+              logAbandoned="true" 
+              username="{{DB_USER}}" 
+              password="{{DB_PASS}}"
+              driverClassName="org.postgresql.Driver" 
+              url="jdbc:postgresql://{{DB_HOST}}:{{DB_PORT}}/{{DB_NAME}}"/>
+
+    <Resource name="BusinessDataDS" auth="Container" type="javax.sql.DataSource"
+        factory="bitronix.tm.resource.ResourceObjectFactory" uniqueName="jdbc/BusinessDataDSXA" />
+
+    <Resource name="NotManagedBizDataDS"  
+              auth="Container"  
+              type="javax.sql.DataSource" 
+              maxActive="17"  
+              minIdle="5"  
+              maxWait="10000"  
+              initialSize="3" 
+              validationQuery="SELECT 1"
+              validationInterval="30000"
+              removeAbandoned="true" 
+              logAbandoned="true" 
+              username="{{BIZ_DB_USER}}" 
+              password="{{BIZ_DB_PASS}}"
+              driverClassName="org.postgresql.Driver" 
+              url="jdbc:postgresql://{{DB_HOST}}:{{DB_PORT}}/{{BIZ_DB_NAME}}"/>
+
+</Context>
