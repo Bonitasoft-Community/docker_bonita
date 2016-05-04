@@ -48,7 +48,6 @@ RUN mkdir /opt/files \
 # add Bonita BPM archive to the container
 #RUN wget -q http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip -O /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip \
 #  && echo "$BONITA_SHA256" /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip | sha256sum -c -
-RUN wget -q http://pollux1.rd.lan/job/bos_web-distrib/lastSuccessfulBuild/artifact/bundle/tomcat/target/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip -O /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
 
 # create Volume to store Bonita BPM files
 VOLUME /opt/bonita
