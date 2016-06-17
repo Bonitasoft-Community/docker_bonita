@@ -26,7 +26,7 @@ RUN wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
 
-ENV BONITA_VERSION 7.3.0-SNAPSHOT
+ENV BONITA_VERSION 7.3.0.beta-03
 ENV TOMCAT_VERSION 7.0.67
 ENV BONITA_SHA256 5547acb5d45eaaffec14600afea72e99668278c8fc9c050e45ba6dedb389ff2c
 ENV POSTGRES_JDBC_DRIVER postgresql-9.3-1102.jdbc41.jar

@@ -29,11 +29,6 @@
         <filter-name>SecurityFilter</filter-name>
         <filter-class>org.bonitasoft.console.common.server.login.filter.SecurityFilter</filter-class>
     </filter>
-    <!-- Bonita home Filter -->
-    <filter>
-        <filter-name>BonitaHomeFilter</filter-name>
-        <filter-class>org.bonitasoft.console.common.server.login.filter.BonitaHomeFilter</filter-class>
-    </filter>
     <!--Rest filter -->
     <filter>
         <filter-name>RestAPIAuthorizationFilter</filter-name>
@@ -168,10 +163,6 @@
     <filter-mapping>
         <filter-name>SecurityFilter</filter-name>
         <url-pattern>/portal/homepage</url-pattern>
-        <url-pattern>/login.jsp</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BonitaHomeFilter</filter-name>
         <url-pattern>/login.jsp</url-pattern>
     </filter-mapping>
     <filter-mapping>
@@ -333,6 +324,10 @@
         </init-param>
     </servlet>
 
+    <servlet>
+        <servlet-name>iconServlet</servlet-name>
+        <servlet-class>org.bonitasoft.console.common.server.servlet.IconServlet</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>loginService</servlet-name>
         <servlet-class>org.bonitasoft.console.common.server.login.servlet.LoginServlet</servlet-class>
@@ -525,6 +520,10 @@
     <servlet-mapping>
         <servlet-name>exportProcessActorsServlet</servlet-name>
         <url-pattern>/portal/exportActors</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>iconServlet</servlet-name>
+        <url-pattern>/avatars/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>deprecatedDocumentDownloadServlet</servlet-name>

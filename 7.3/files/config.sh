@@ -33,6 +33,10 @@ else
 fi
 
 case $DB_VENDOR in
+	"h2")
+	    DB_HOST=${DB_HOST:-localhost}
+		DB_PORT=${DB_PORT:-9091}
+		;;
 	"postgres")
 		JDBC_DRIVER=$POSTGRES_JDBC_DRIVER
 		DB_PORT=${DB_PORT:-5432}
@@ -100,11 +104,12 @@ fi
 # apply conf
 # copy templates
 cp  ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
+cp  ${BONITA_TPL}/database.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
 # if required, uncomment dynamic checks on REST API
 if [ "$REST_API_DYN_AUTH_CHECKS" = 'true' ]
 then
-    sed -i -e 's/^#GET|/GET|/' -e 's/^#POST|/POST|/' -e 's/^#PUT|/PUT|/' -e 's/^#DELETE|/DELETE|/' ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/platform-setup/portal-tenant/dynamic-permissions-checks.properties
+    sed -i -e 's/^#GET|/GET|/' -e 's/^#POST|/POST|/' -e 's/^#PUT|/PUT|/' -e 's/^#DELETE|/DELETE|/' ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/platform_conf/initial/tenant_template_portal/dynamic-permissions-checks.properties
 fi
 # if required, deactivate HTTP API by updating bonita.war with proper web.xml
 if [ "$HTTP_API" = 'false' ]
@@ -114,13 +119,13 @@ then
 fi
 
 # replace variables
-find ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/platform-setup -name "*.properties" | xargs -I{} -n10 sed -i \
-    -e 's/^userName\s*=.*/'"userName=${TENANT_LOGIN}"'/' \
-    -e 's/^userPassword\s*=.*/'"userPassword=${TENANT_PASSWORD}"'/' \
+find ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/platform_conf/initial -name "*.properties" | xargs -I{} -n10 sed -i \
+    -e 's/^#userName\s*=.*/'"userName=${TENANT_LOGIN}"'/' \
+    -e 's/^#userPassword\s*=.*/'"userPassword=${TENANT_PASSWORD}"'/' \
     -e 's/^platform.tenant.default.username\s*=.*/'"platform.tenant.default.username=${TENANT_LOGIN}"'/' \
     -e 's/^platform.tenant.default.password\s*=.*/'"platform.tenant.default.password=${TENANT_PASSWORD}"'/' \
-    -e 's/^platformAdminUsername\s*=.*/'"platformAdminUsername=${PLATFORM_LOGIN}"'/' \
-    -e 's/^platformAdminPassword\s*=.*/'"platformAdminPassword=${PLATFORM_PASSWORD}"'/'
+    -e 's/^#platformAdminUsername\s*=.*/'"platformAdminUsername=${PLATFORM_LOGIN}"'/' \
+    -e 's/^#platformAdminPassword\s*=.*/'"platformAdminPassword=${PLATFORM_PASSWORD}"'/'
 
 sed -i -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{BIZ_DB_VENDOR}}/'"${BIZ_DB_VENDOR}"'/' \
@@ -128,10 +133,11 @@ sed -i -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
 
 case "${DB_VENDOR}" in
-	mysql|postgres)
+	h2|mysql|postgres)
 		cp ${BONITA_TPL}/${DB_VENDOR}/bitronix-resources.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties
 		cp ${BONITA_TPL}/${DB_VENDOR}/bonita.xml ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
-		sed -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
+		sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
+            -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
 		    -e 's/{{DB_PASS}}/'"${DB_PASS}"'/' \
 		    -e 's/{{DB_NAME}}/'"${DB_NAME}"'/' \
 		    -e 's/{{DB_HOST}}/'"${DB_HOST}"'/' \
@@ -140,13 +146,14 @@ case "${DB_VENDOR}" in
 		    -e 's/{{BIZ_DB_PASS}}/'"${BIZ_DB_PASS}"'/' \
 		    -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
 		    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties \
-		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
+		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml \
+		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
 		# if not present, copy JDBC driver into the Bundle
 		file=$(basename $JDBC_DRIVER)
 		if [ ! -e ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/$file ]
 		then
-        cp ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/
+            cp ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/
 		fi
 		;;
 esac
