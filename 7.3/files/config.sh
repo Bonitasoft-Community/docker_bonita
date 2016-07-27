@@ -35,7 +35,6 @@ fi
 case $DB_VENDOR in
 	"h2")
 	    DB_HOST=${DB_HOST:-localhost}
-		DB_PORT=${DB_PORT:-9091}
 		;;
 	"postgres")
 		JDBC_DRIVER=$POSTGRES_JDBC_DRIVER
@@ -133,21 +132,9 @@ sed -i -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
 
 case "${DB_VENDOR}" in
-	h2|mysql|postgres)
+	mysql|postgres)
 		cp ${BONITA_TPL}/${DB_VENDOR}/bitronix-resources.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties
 		cp ${BONITA_TPL}/${DB_VENDOR}/bonita.xml ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
-		sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
-            -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
-		    -e 's/{{DB_PASS}}/'"${DB_PASS}"'/' \
-		    -e 's/{{DB_NAME}}/'"${DB_NAME}"'/' \
-		    -e 's/{{DB_HOST}}/'"${DB_HOST}"'/' \
-		    -e 's/{{DB_PORT}}/'"${DB_PORT}"'/' \
-		    -e 's/{{BIZ_DB_USER}}/'"${BIZ_DB_USER}"'/' \
-		    -e 's/{{BIZ_DB_PASS}}/'"${BIZ_DB_PASS}"'/' \
-		    -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
-		    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties \
-		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml \
-		       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
 		# if not present, copy JDBC driver into the Bundle
 		file=$(basename $JDBC_DRIVER)
@@ -157,3 +144,17 @@ case "${DB_VENDOR}" in
 		fi
 		;;
 esac
+
+sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
+    -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
+    -e 's/{{DB_PASS}}/'"${DB_PASS}"'/' \
+    -e 's/{{DB_NAME}}/'"${DB_NAME}"'/' \
+    -e 's/{{DB_HOST}}/'"${DB_HOST}"'/' \
+    -e 's/{{DB_PORT}}/'"${DB_PORT}"'/' \
+    -e 's/{{BIZ_DB_USER}}/'"${BIZ_DB_USER}"'/' \
+    -e 's/{{BIZ_DB_PASS}}/'"${BIZ_DB_PASS}"'/' \
+    -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
+    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties \
+       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml \
+       ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
+
