@@ -22,7 +22,7 @@ JAVA_OPTS="{{JAVA_OPTS}}"
 #SECURITY_OPTS="-Djava.security.auth.login.config=${CATALINA_HOME}/conf/jaas-standard.cfg"
 
 # Pass the JVM system properties to Tomcat JVM using CATALINA_OPTS variable
-CATALINA_OPTS="${CATALINA_OPTS} ${PLATFORM_SETUP} ${H2_DATABASE_DIR} ${DB_OPTS} ${BDM_DB_OPTS} ${BTM_OPTS} ${JAVA_OPTS} ${INCIDENT_LOG_DIR} -Dfile.encoding=UTF-8 -Xshare:auto -Xms1024m -Xmx1024m -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError"
+CATALINA_OPTS="${CATALINA_OPTS} ${PLATFORM_SETUP} ${H2_DATABASE_DIR} ${DB_OPTS} ${BDM_DB_OPTS} ${BTM_OPTS} ${JAVA_OPTS} ${INCIDENT_LOG_DIR} -Dfile.encoding=UTF-8 -Xshare:auto -XX:+HeapDumpOnOutOfMemoryError"
 export CATALINA_OPTS
 
 # Only set CATALINA_PID if not already set (check for empty value) by startup script (usually done by /etc/init.d/tomcat7 but not by startup.sh nor catalina.sh)
