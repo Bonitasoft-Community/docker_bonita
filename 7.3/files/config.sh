@@ -34,7 +34,8 @@ fi
 
 case $DB_VENDOR in
 	"h2")
-	    DB_HOST=${DB_HOST:-localhost}
+		DB_HOST=${DB_HOST:-localhost}
+		DB_PORT=${DB_PORT:-9091}
 		;;
 	"postgres")
 		JDBC_DRIVER=$POSTGRES_JDBC_DRIVER
@@ -102,8 +103,10 @@ fi
 
 # apply conf
 # copy templates
-cp  ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
-cp  ${BONITA_TPL}/database.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
+cp ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
+cp ${BONITA_TPL}/database.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
+cp ${BONITA_TPL}/${DB_VENDOR}/bitronix-resources.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties
+cp ${BONITA_TPL}/${DB_VENDOR}/bonita.xml ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
 
 # if required, uncomment dynamic checks on REST API
 if [ "$REST_API_DYN_AUTH_CHECKS" = 'true' ]
@@ -131,19 +134,15 @@ sed -i -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{JAVA_OPTS}}/'"${JAVA_OPTS}"'/' \
     ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/bin/setenv.sh
 
-case "${DB_VENDOR}" in
-	mysql|postgres)
-		cp ${BONITA_TPL}/${DB_VENDOR}/bitronix-resources.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/bitronix-resources.properties
-		cp ${BONITA_TPL}/${DB_VENDOR}/bonita.xml ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/conf/Catalina/localhost/bonita.xml
-
-		# if not present, copy JDBC driver into the Bundle
-		file=$(basename $JDBC_DRIVER)
-		if [ ! -e ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/$file ]
-		then
-            cp ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/
-		fi
-		;;
-esac
+if [ -n "$JDBC_DRIVER" ]
+then
+    # if $JDBC_DRIVER is set and the driver is not present, copy the JDBC driver into the Bundle
+    file=$(basename $JDBC_DRIVER)
+    if [ ! -e ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/$file ]
+    then
+        cp ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/lib/bonita/
+    fi
+fi
 
 sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
