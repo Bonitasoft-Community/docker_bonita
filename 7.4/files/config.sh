@@ -107,6 +107,18 @@ fi
 # copy templates
 cp ${BONITA_TPL}/database.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
+# if required, uncomment dynamic checks on REST API
+if [ "$REST_API_DYN_AUTH_CHECKS" = 'true' ]
+then
+    sed -i -e 's/^#GET|/GET|/' -e 's/^#POST|/POST|/' -e 's/^#PUT|/PUT|/' -e 's/^#DELETE|/DELETE|/' ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/platform_conf/initial/tenant_template_portal/dynamic-permissions-checks.properties
+fi
+# if required, deactivate HTTP API by updating bonita.war with proper web.xml
+if [ "$HTTP_API" = 'false' ]
+then
+    cd ${BONITA_FILES}/
+    zip ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/server/webapps/bonita.war WEB-INF/web.xml
+fi
+
 sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
     -e 's/{{DB_PASS}}/'"${DB_PASS}"'/' \
