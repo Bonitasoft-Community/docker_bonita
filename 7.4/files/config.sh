@@ -129,3 +129,7 @@ sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{BIZ_DB_PASS}}/'"${BIZ_DB_PASS}"'/' \
     -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
     -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
+
+# to prevent exit
+sed -e 's/start/run/' \
+    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/server/bin/startup.sh

@@ -19,5 +19,4 @@ then
 fi
 # launch tomcat
 cd /opt/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/
-gosu bonita ./start-bonita.sh
-exec gosu bonita /bin/bash
+exec gosu bonita ./start-bonita.sh
