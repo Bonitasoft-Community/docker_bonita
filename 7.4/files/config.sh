@@ -21,13 +21,11 @@ then
 	DB_VENDOR='postgres'
 	DB_HOST=$POSTGRES_PORT_5432_TCP_ADDR
 	DB_PORT=$POSTGRES_PORT_5432_TCP_PORT
-	JDBC_DRIVER=$POSTGRES_JDBC_DRIVER
 elif [ -n "$MYSQL_PORT_3306_TCP_PORT" ]
 then
 	DB_VENDOR='mysql'
 	DB_HOST=$MYSQL_PORT_3306_TCP_ADDR
 	DB_PORT=$MYSQL_PORT_3306_TCP_PORT
-	JDBC_DRIVER=${MYSQL_JDBC_DRIVER}-bin.jar
 else
 	DB_VENDOR=${DB_VENDOR:-h2}
 fi
@@ -38,11 +36,9 @@ case $DB_VENDOR in
 		DB_PORT=${DB_PORT:-9091}
 		;;
 	"postgres")
-		JDBC_DRIVER=$POSTGRES_JDBC_DRIVER
 		DB_PORT=${DB_PORT:-5432}
 		;;
 	"mysql")
-		JDBC_DRIVER=${MYSQL_JDBC_DRIVER}-bin.jar
 		DB_PORT=${DB_PORT:-3306}
 		;;
 	*)
@@ -98,13 +94,12 @@ then
 		# ensure to create business db and user if needed
 		create_user_if_not_exists $DB_VENDOR $DB_HOST $DB_PORT $DB_ADMIN_USER $DB_ADMIN_PASS $BIZ_DB_USER $BIZ_DB_PASS
 		create_database_if_not_exists $DB_VENDOR $DB_HOST $DB_PORT $DB_ADMIN_USER $DB_ADMIN_PASS $BIZ_DB_NAME $BIZ_DB_USER
-
-
 	fi
 fi
 
 # apply conf
 # copy templates
+cp ${BONITA_TPL}/setenv.sh ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/tomcat-templates/setenv.sh
 cp ${BONITA_TPL}/database.properties ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
 # if required, uncomment dynamic checks on REST API
@@ -119,6 +114,27 @@ then
     zip ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/server/webapps/bonita.war WEB-INF/web.xml
 fi
 
+# replace variables
+find ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/platform_conf/initial -name "*.properties" | xargs -n10 sed -i \
+    -e 's/^#userName\s*=.*/'"userName=${TENANT_LOGIN}"'/' \
+    -e 's/^#userPassword\s*=.*/'"userPassword=${TENANT_PASSWORD}"'/' \
+    -e 's/^platform.tenant.default.username\s*=.*/'"platform.tenant.default.username=${TENANT_LOGIN}"'/' \
+    -e 's/^platform.tenant.default.password\s*=.*/'"platform.tenant.default.password=${TENANT_PASSWORD}"'/' \
+    -e 's/^#platformAdminUsername\s*=.*/'"platformAdminUsername=${PLATFORM_LOGIN}"'/' \
+    -e 's/^#platformAdminPassword\s*=.*/'"platformAdminPassword=${PLATFORM_PASSWORD}"'/'
+
+sed -i -e 's/{{JAVA_OPTS}}/'"${JAVA_OPTS}"'/' ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/tomcat-templates/setenv.sh
+
+if [ -n "$JDBC_DRIVER" ]
+then
+    # if $JDBC_DRIVER is set and the driver is not present, copy the JDBC driver into the Bundle
+    file=$(basename $JDBC_DRIVER)
+    if [ ! -e ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/lib/$file ]
+    then
+        cp ${BONITA_FILES}/${JDBC_DRIVER} ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/lib/
+    fi
+fi
+
 sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{DB_USER}}/'"${DB_USER}"'/' \
     -e 's/{{DB_PASS}}/'"${DB_PASS}"'/' \
@@ -130,6 +146,7 @@ sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
     -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
-# to prevent exit
-sed -e 's/start/run/' \
-    -i ${BONITA_PATH}/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/server/bin/startup.sh
+# use the setup tool to initialize and configure Bonita BPM Tomcat bundle
+cd /opt/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}
+./setup/setup.sh init
+./setup/setup.sh configure
