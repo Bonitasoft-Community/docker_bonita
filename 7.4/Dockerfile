@@ -26,9 +26,9 @@ RUN wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
 
-ENV BONITA_VERSION 7.4.0
+ENV BONITA_VERSION 7.4.1
 ENV TOMCAT_VERSION 7.0.67
-ENV BONITA_SHA256 adbf2d93fc4d6a68248f71af55916ea6b334d382a84c8b9c96adb254ff16d020
+ENV BONITA_SHA256 e299ae1b68f40699ec8607911967c614206c7e74d6ab36ea03d3f1de7e8109a3
 
 # add Bonita BPM archive to the container
 RUN mkdir /opt/files \
