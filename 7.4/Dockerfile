@@ -26,14 +26,26 @@ RUN wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
 
-ENV BONITA_VERSION 7.4.2
-ENV TOMCAT_VERSION 7.0.67
-ENV BONITA_SHA256 62f489362ed273f700032f5da1b4dc70a4bc74c9add2cb27e6c3be50e1e284f6
+# use --build-arg key=value in docker build command to override arguments
+ARG BONITA_VERSION
+ARG TOMCAT_VERSION
+ARG BONITA_SHA256
+ARG BONITA_URL
+
+ENV BONITA_VERSION ${BONITA_VERSION:-7.4.2}
+ENV TOMCAT_VERSION ${TOMCAT_VERSION:-7.0.67}
+ENV BONITA_SHA256  ${BONITA_SHA256:-62f489362ed273f700032f5da1b4dc70a4bc74c9add2cb27e6c3be50e1e284f6}
+ENV BONITA_URL ${BONITA_URL:-http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
 
 # add Bonita BPM archive to the container
 RUN mkdir /opt/files \
-  && wget -q http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip -O /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip \
-  && echo "$BONITA_SHA256" /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip | sha256sum -c -
+  && wget -q ${BONITA_URL} -O /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
+
+# display downloaded checksum
+RUN sha256sum /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
+
+# check with expected checksum
+RUN echo "$BONITA_SHA256" /opt/files/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip | sha256sum -c -
 
 # create Volume to store Bonita BPM files
 VOLUME /opt/bonita
