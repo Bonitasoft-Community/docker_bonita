@@ -148,5 +148,5 @@ sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
 
 # use the setup tool to initialize and configure Bonita BPM Tomcat bundle
 cd /opt/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}
-./setup/setup.sh init
+echo y | ./setup/setup.sh init
 ./setup/setup.sh configure
