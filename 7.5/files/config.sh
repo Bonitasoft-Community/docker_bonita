@@ -51,9 +51,11 @@ BIZ_DB_VENDOR=$DB_VENDOR
 DB_NAME=${DB_NAME:-bonitadb}
 DB_USER=${DB_USER:-bonitauser}
 DB_PASS=${DB_PASS:-bonitapass}
+DB_DROP_EXISTING=${DB_DROP_EXISTING:-N}
 BIZ_DB_NAME=${BIZ_DB_NAME:-businessdb}
 BIZ_DB_USER=${BIZ_DB_USER:-businessuser}
 BIZ_DB_PASS=${BIZ_DB_PASS:-businesspass}
+BIZ_DB_DROP_EXISTING=${BIZ_DB_DROP_EXISTING:-N}
 
 # if not enforced, set the default credentials
 PLATFORM_LOGIN=${PLATFORM_LOGIN:-platformAdmin}
@@ -89,11 +91,11 @@ then
 	if [ "${DB_VENDOR}" != 'h2' ]
 	then
 		# ensure to create bonita db and user
-		create_user_if_not_exists $DB_VENDOR $DB_HOST $DB_PORT $DB_ADMIN_USER $DB_ADMIN_PASS $DB_USER $DB_PASS
-		create_database_if_not_exists $DB_VENDOR $DB_HOST $DB_PORT $DB_ADMIN_USER $DB_ADMIN_PASS $DB_NAME $DB_USER
+		create_user_if_not_exists "$DB_VENDOR" "$DB_HOST" "$DB_PORT" "$DB_ADMIN_USER" "$DB_ADMIN_PASS" "$DB_USER" "$DB_PASS"
+		create_database_if_not_exists "$DB_VENDOR" "$DB_HOST" "$DB_PORT" "$DB_ADMIN_USER" "$DB_ADMIN_PASS" "$DB_NAME" "$DB_USER" "$DB_PASS" "$DB_DROP_EXISTING"
 		# ensure to create business db and user if needed
-		create_user_if_not_exists $DB_VENDOR $DB_HOST $DB_PORT $DB_ADMIN_USER $DB_ADMIN_PASS $BIZ_DB_USER $BIZ_DB_PASS
-		create_database_if_not_exists $DB_VENDOR $DB_HOST $DB_PORT $DB_ADMIN_USER $DB_ADMIN_PASS $BIZ_DB_NAME $BIZ_DB_USER
+		create_user_if_not_exists "$DB_VENDOR" "$DB_HOST" "$DB_PORT" "$DB_ADMIN_USER" "$DB_ADMIN_PASS" "$BIZ_DB_USER" "$BIZ_DB_PASS"
+		create_database_if_not_exists "$DB_VENDOR" "$DB_HOST" "$DB_PORT" "$DB_ADMIN_USER" "$DB_ADMIN_PASS" "$BIZ_DB_NAME" "$BIZ_DB_USER" "$BIZ_DB_PASS" "$BIZ_DB_DROP_EXISTING"
 	fi
 fi
 
