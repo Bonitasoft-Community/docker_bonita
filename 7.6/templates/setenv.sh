@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Set some JVM system properties required by Bonita BPM
+# Set some JVM system properties required by Bonita
 
 PLATFORM_SETUP="-Dorg.bonitasoft.platform.setup.folder=${CATALINA_HOME}/../setup"
 #When changing org.bonitasoft.h2.database.dir location, update ${CATALINA_HOME}/conf/bitronix-resources.properties datasources accordingly.
@@ -21,6 +21,9 @@ JAVA_OPTS="{{JAVA_OPTS}}"
 
 # Optional JAAS configuration. Usually used when delegating authentication to LDAP / Active Directory server
 #SECURITY_OPTS="-Djava.security.auth.login.config=${CATALINA_HOME}/conf/jaas-standard.cfg"
+
+# Optional Java debug option. Use to connect an external debugger.
+#DEBUG_OPTS="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
 
 # Pass the JVM system properties to Tomcat JVM using CATALINA_OPTS variable
 CATALINA_OPTS="${CATALINA_OPTS} ${PLATFORM_SETUP} ${H2_DATABASE_DIR} ${DB_OPTS} ${BDM_DB_OPTS} ${BTM_OPTS} ${JAVA_OPTS} ${INCIDENT_LOG_DIR} -Dfile.encoding=UTF-8 -Xshare:auto -XX:+HeapDumpOnOutOfMemoryError"
