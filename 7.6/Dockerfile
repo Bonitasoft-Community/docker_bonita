@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
   openjdk-8-jre-headless \
   postgresql-client \
   unzip \
-  wget \
+  curl \
   zip \
   && rm -rf /var/lib/apt/lists/*
 
@@ -20,8 +20,8 @@ RUN groupadd -r bonita -g 1000 \
 
 # grab gosu
 RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-RUN wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --print-architecture)" -O /usr/local/bin/gosu \
-  && wget -q "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --print-architecture).asc" -O /usr/local/bin/gosu.asc \
+RUN curl -sSL "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --print-architecture)" -o /usr/local/bin/gosu \
+  && curl -sSL "https://github.com/tianon/gosu/releases/download/1.6/gosu-$(dpkg --print-architecture).asc" -o /usr/local/bin/gosu.asc \
   && gpg --verify /usr/local/bin/gosu.asc \
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
@@ -32,14 +32,14 @@ ARG TOMCAT_VERSION
 ARG BONITA_SHA256
 ARG BONITA_URL
 
-ENV BONITA_VERSION ${BONITA_VERSION:-7.6.0.alpha-01}
-ENV TOMCAT_VERSION ${TOMCAT_VERSION:-8.5.16}
-ENV BONITA_SHA256  ${BONITA_SHA256:-30f8fd4e1bc606ae3f8c7f55359b7f4e2e61909b50fc5a23f03b89a00b604f88}
+ENV BONITA_VERSION ${BONITA_VERSION:-7.6.0.beta-02}
+ENV TOMCAT_VERSION ${TOMCAT_VERSION:-8.5.23}
+ENV BONITA_SHA256  ${BONITA_SHA256:-3264c97f4b25a3586dd6417dd7803c80025dbcc0f96e8cb7b5e51538acff3e53}
 ENV BONITA_URL ${BONITA_URL:-http://download.forge.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
 
 # add Bonita archive to the container
 RUN mkdir /opt/files \
-  && wget -q ${BONITA_URL} -O /opt/files/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
+  && curl -sSL ${BONITA_URL} -o /opt/files/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
 
 # display downloaded checksum
 RUN sha256sum /opt/files/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
