@@ -35,7 +35,7 @@ ARG BONITA_URL
 ENV BONITA_VERSION ${BONITA_VERSION:-7.5.4}
 ENV TOMCAT_VERSION ${TOMCAT_VERSION:-7.0.76}
 ENV BONITA_SHA256  ${BONITA_SHA256:-b7ccec231d9083b1b532b0aeaa4de3d38d91cae12df1725f8a802be5be170d21}
-ENV BONITA_URL ${BONITA_URL:-http://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
+ENV BONITA_URL ${BONITA_URL:-https://download.forge.ow2.org/bonita/BonitaBPMCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
 
 # add Bonita BPM archive to the container
 RUN mkdir /opt/files \

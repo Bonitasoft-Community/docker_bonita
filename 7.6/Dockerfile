@@ -35,7 +35,7 @@ ARG BONITA_URL
 ENV BONITA_VERSION ${BONITA_VERSION:-7.6.0.beta-02}
 ENV TOMCAT_VERSION ${TOMCAT_VERSION:-8.5.23}
 ENV BONITA_SHA256  ${BONITA_SHA256:-3264c97f4b25a3586dd6417dd7803c80025dbcc0f96e8cb7b5e51538acff3e53}
-ENV BONITA_URL ${BONITA_URL:-http://download.forge.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
+ENV BONITA_URL ${BONITA_URL:-https://download.forge.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
 
 # add Bonita archive to the container
 RUN mkdir /opt/files \
