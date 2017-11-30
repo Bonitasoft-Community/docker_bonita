@@ -11,7 +11,7 @@ then
 fi
 if [ -d /opt/custom-init.d/ ]
 then
-	for f in /opt/custom-init.d/*.sh
+	for f in $(ls -v /opt/custom-init.d/*.sh)
 	do
 		[ -f "$f" ] && . "$f"
 	done
