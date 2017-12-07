@@ -22,14 +22,11 @@ JAVA_OPTS="{{JAVA_OPTS}}"
 # Optional JAAS configuration. Usually used when delegating authentication to LDAP / Active Directory server
 #SECURITY_OPTS="-Djava.security.auth.login.config=${CATALINA_HOME}/conf/jaas-standard.cfg"
 
-# Optional Java debug option. Use to connect an external debugger.
-#DEBUG_OPTS="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
-
 # Pass the JVM system properties to Tomcat JVM using CATALINA_OPTS variable
 CATALINA_OPTS="${CATALINA_OPTS} ${PLATFORM_SETUP} ${H2_DATABASE_DIR} ${DB_OPTS} ${BDM_DB_OPTS} ${BTM_OPTS} ${JAVA_OPTS} ${INCIDENT_LOG_DIR} -Dfile.encoding=UTF-8 -Xshare:auto -XX:+HeapDumpOnOutOfMemoryError"
 export CATALINA_OPTS
 
-# Only set CATALINA_PID if not already set (check for empty value) by startup script (usually done by /etc/init.d/tomcat7 but not by startup.sh nor catalina.sh)
+# Only set CATALINA_PID if not already set (check for empty value) by startup script (usually done by /etc/init.d/tomcat8 but not by startup.sh nor catalina.sh)
 if [ -z ${CATALINA_PID+x} ]; then
         CATALINA_PID=${CATALINA_BASE}/catalina.pid;
         export CATALINA_PID;
