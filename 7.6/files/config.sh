@@ -148,6 +148,22 @@ sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
     -i ${BONITA_PATH}/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/database.properties
 
+if [ "$USE_SSL" == "true" ]
+then
+	case "${DB_VENDOR}" in
+		mysql)
+			sed -e "s/mysql\(\.bdm\)\?\.url=.*/&\\&useSSL=true\\&requireSSL=false/" \
+				-i ${BONITA_PATH}/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/internal.properties
+			;;
+		postgres)
+			sed -e "s/postgres\(\.bdm\)\?\.url=.*/&\\?ssl=true/" \
+				-i ${BONITA_PATH}/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/internal.properties
+			sed -e "s/resource.\(ds.\).driverProperties.databaseName=.*/&\nresource.\1.driverProperties.ssl=true/" \
+				-i ${BONITA_PATH}/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}/setup/tomcat-templates/bitronix-resources.properties
+			;;
+	esac
+fi
+
 # use the setup tool to initialize and configure Bonita BPM Tomcat bundle
 cd /opt/bonita/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}
 echo y | ./setup/setup.sh init
