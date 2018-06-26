@@ -31,7 +31,7 @@ function create_user_if_not_exists {
 			# if the user is not present, create it
 			if [ $? -eq 1 ]
 			then
-				psql -U $db_admin_user -h $db_host -p $db_port -d postgres -c "CREATE USER ${db_user} WITH PASSWORD '${db_pass}';"
+				psql -U $db_admin_user -h $db_host -p $db_port -d postgres -c "CREATE USER \"${db_user}\" WITH PASSWORD '${db_pass}';"
 			fi	
 			;;
 	esac
@@ -64,7 +64,7 @@ function create_database_if_not_exists {
 			# if the db is not present, create it
 			if [ $? -eq 1 ]
 			then
-				psql -U $db_admin_user -h $db_host -p $db_port -d postgres -c "CREATE DATABASE ${db_name} OWNER ${db_user};"
+				psql -U $db_admin_user -h $db_host -p $db_port -d postgres -c "CREATE DATABASE ${db_name} OWNER \"${db_user}\";"
 			fi
 			;;
 	esac
