@@ -55,8 +55,8 @@ function create_database_if_not_exists {
 	case "${db_vendor}" in
 		mysql)
 			# if the db is not present, create it
-			mysql -u $db_admin_user -p${db_admin_pass} -h $db_host --port $db_port -e "CREATE DATABASE IF NOT EXISTS ${db_name};"
-			mysql -u $db_admin_user -p${db_admin_pass} -h $db_host --port $db_port -e "GRANT ALL PRIVILEGES ON ${db_name}.* to '${db_user}'@'%';"
+			mysql -u $db_admin_user -p${db_admin_pass} -h $db_host --port $db_port -e "CREATE DATABASE IF NOT EXISTS \`${db_name}\`;"
+			mysql -u $db_admin_user -p${db_admin_pass} -h $db_host --port $db_port -e "GRANT ALL PRIVILEGES ON \`${db_name}\`.* to '${db_user}'@'%';"
 			;;
 		postgres)
 			# check if the db exists
@@ -64,7 +64,7 @@ function create_database_if_not_exists {
 			# if the db is not present, create it
 			if [ $? -eq 1 ]
 			then
-				psql -U $db_admin_user -h $db_host -p $db_port -d postgres -c "CREATE DATABASE ${db_name} OWNER \"${db_user}\";"
+				psql -U $db_admin_user -h $db_host -p $db_port -d postgres -c "CREATE DATABASE \"${db_name}\" OWNER \"${db_user}\";"
 			fi
 			;;
 	esac
