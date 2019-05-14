@@ -35,17 +35,17 @@ ARG BONITA_URL
 ENV BONITA_VERSION ${BONITA_VERSION:-7.9.0.W20-01}
 ENV TOMCAT_VERSION ${TOMCAT_VERSION:-8.5.34}
 ENV BONITA_SHA256  ${BONITA_SHA256:-79b6e5cafe0bac53958238ff5e777646c5bb35fea5e87e7f7b51a2b273ac961a}
-ENV BONITA_URL ${BONITA_URL:-https://release.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip}
+ENV BONITA_URL ${BONITA_URL:-https://release.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}-tomcat.zip}
 
 # add Bonita archive to the container
 RUN mkdir /opt/files \
-  && curl -fsSL ${BONITA_URL} -o /opt/files/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
+  && curl -fsSL ${BONITA_URL} -o /opt/files/BonitaCommunity-${BONITA_VERSION}-tomcat.zip
 
 # display downloaded checksum
-RUN sha256sum /opt/files/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip
+RUN sha256sum /opt/files/BonitaCommunity-${BONITA_VERSION}-tomcat.zip
 
 # check with expected checksum
-RUN echo "$BONITA_SHA256" /opt/files/BonitaCommunity-${BONITA_VERSION}-Tomcat-${TOMCAT_VERSION}.zip | sha256sum -c -
+RUN echo "$BONITA_SHA256" /opt/files/BonitaCommunity-${BONITA_VERSION}-tomcat.zip | sha256sum -c -
 
 # create Volume to store Bonita files
 VOLUME /opt/bonita
