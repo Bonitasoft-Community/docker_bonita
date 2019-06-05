@@ -148,7 +148,12 @@ sed -e 's/{{DB_VENDOR}}/'"${DB_VENDOR}"'/' \
     -e 's/{{BIZ_DB_NAME}}/'"${BIZ_DB_NAME}"'/' \
     -i ${BONITA_PATH}/BonitaCommunity-${BONITA_VERSION}-tomcat/setup/database.properties
 
-# use the setup tool to initialize and configure Bonita BPM Tomcat bundle
+# apply logging configuration
+cp ${BONITA_FILES}/logging.properties ${BONITA_PATH}/BonitaCommunity-${BONITA_VERSION}-tomcat/server/conf/logging.properties
+
+# use the setup tool to initialize and configure Bonita Tomcat bundle
 cd /opt/bonita/BonitaCommunity-${BONITA_VERSION}-tomcat
-echo y | ./setup/setup.sh init
-./setup/setup.sh configure
+# platform setup tool logging configuration file
+BONITA_SETUP_LOGGING_FILE=${BONITA_SETUP_LOGGING_FILE:-/opt/bonita/BonitaCommunity-${BONITA_VERSION}-tomcat/setup/logback.xml}
+echo y | ./setup/setup.sh init -Dlogging.config=${BONITA_SETUP_LOGGING_FILE}
+./setup/setup.sh configure -Dlogging.config=${BONITA_SETUP_LOGGING_FILE}
