@@ -1,15 +1,16 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 MAINTAINER Jérémy Jacquier-Roux <jeremy.jacquier-roux@bonitasoft.org>
 
 # install packages
 RUN apt-get update && apt-get install -y \
   mysql-client-core-5.7 \
-  openjdk-8-jre-headless \
+  openjdk-11-jre-headless \
   postgresql-client \
   unzip \
   curl \
   zip \
+  gnupg \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/custom-init.d/
