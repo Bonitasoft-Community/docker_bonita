@@ -4,13 +4,13 @@ MAINTAINER Jérémy Jacquier-Roux <jeremy.jacquier-roux@bonitasoft.org>
 
 # install packages
 RUN apt-get update && apt-get install -y \
+  curl \
+  gnupg2 \
   mysql-client-core-5.7 \
   openjdk-11-jre-headless \
   postgresql-client \
   unzip \
-  curl \
   zip \
-  gnupg \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/custom-init.d/
