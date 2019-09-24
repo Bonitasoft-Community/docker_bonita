@@ -45,7 +45,7 @@ RUN mkdir /opt/files \
 RUN sha256sum /opt/files/BonitaCommunity-${BONITA_VERSION}.zip
 
 # check with expected checksum
-RUN echo "$BONITA_SHA256" /opt/files/BonitaCommunity-${BONITA_VERSION}-tomcat.zip | sha256sum -c -
+#RUN echo "$BONITA_SHA256" /opt/files/BonitaCommunity-${BONITA_VERSION}.zip | sha256sum -c -
 
 # create Volume to store Bonita files
 VOLUME /opt/bonita

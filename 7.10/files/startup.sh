@@ -18,5 +18,5 @@ then
 	done
 fi
 # launch tomcat
-export LOGGING_CONFIG="-Djava.util.logging.config.file=${BONITA_SERVER_LOGGING_FILE:-/opt/bonita/BonitaCommunity-${BONITA_VERSION}-tomcat/server/conf/logging.properties}"
-exec gosu bonita /opt/bonita/BonitaCommunity-${BONITA_VERSION}-tomcat/server/bin/catalina.sh run
+export LOGGING_CONFIG="-Djava.util.logging.config.file=${BONITA_SERVER_LOGGING_FILE:-/opt/bonita/BonitaCommunity-${BONITA_VERSION}/server/conf/logging.properties}"
+exec gosu bonita /opt/bonita/BonitaCommunity-${BONITA_VERSION}/server/bin/catalina.sh run
