@@ -33,8 +33,8 @@ ARG BONITA_VERSION
 ARG BONITA_SHA256
 ARG BONITA_URL
 
-ENV BONITA_VERSION ${BONITA_VERSION:-7.10.0}
-ENV BONITA_SHA256  ${BONITA_SHA256:-31a4ee9e07b20cc07e85e2c01a4e81e440605e0c8a7d70c2cfb1a1123b5f85c0}
+ENV BONITA_VERSION ${BONITA_VERSION:-7.10.0.rc-01}
+ENV BONITA_SHA256  ${BONITA_SHA256:-c6930494f1acec832cebed1f25509eb8eaa6fc380ccc57c07d825c625baadda6}
 ENV BONITA_URL ${BONITA_URL:-https://release.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}.zip}
 
 # add Bonita archive to the container
@@ -45,7 +45,7 @@ RUN mkdir /opt/files \
 RUN sha256sum /opt/files/BonitaCommunity-${BONITA_VERSION}.zip
 
 # check with expected checksum
-#RUN echo "$BONITA_SHA256" /opt/files/BonitaCommunity-${BONITA_VERSION}.zip | sha256sum -c -
+RUN echo "$BONITA_SHA256" /opt/files/BonitaCommunity-${BONITA_VERSION}.zip | sha256sum -c -
 
 # create Volume to store Bonita files
 VOLUME /opt/bonita
