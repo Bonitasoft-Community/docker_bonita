@@ -31,11 +31,16 @@ RUN (gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E36
 # use --build-arg key=value in docker build command to override arguments
 ARG BONITA_VERSION
 ARG BONITA_SHA256
+ARG BASE_URL
 ARG BONITA_URL
 
 ENV BONITA_VERSION ${BONITA_VERSION:-7.10.0.rc-02}
 ENV BONITA_SHA256  ${BONITA_SHA256:-5791d4b6af3695d2cf035ff4db80da5d6fdb7515f679832f6c6ca1b47566657b}
-ENV BONITA_URL ${BONITA_URL:-https://release.ow2.org/bonita/BonitaCommunity-${BONITA_VERSION}.zip}
+
+ENV BASE_URL ${BASE_URL:-https://release.ow2.org/bonita/BonitaCommunity}
+RUN echo "BASE_URL: $BASE_URL"
+ENV BONITA_URL ${BONITA_URL:-${BASE_URL}/BonitaCommunity-${BONITA_VERSION}.zip}
+RUN echo "BONITA_URL: $BONITA_URL"
 
 # add Bonita archive to the container
 RUN mkdir /opt/files \
