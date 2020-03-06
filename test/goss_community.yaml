@@ -1,0 +1,10 @@
+gossfile:
+  goss_common.yaml: {}
+
+command:
+  echo "community_env" && env | sort:
+    title: Checking community environment variables
+    exit-status: 0
+    stdout:
+    - BONITA_SHA256
+    - BONITA_URL

@@ -1,0 +1,24 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh './build.sh -- $BONITA_MINOR_VERSION'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'cd test && ./runTests.sh ../$BONITA_MINOR_VERSION'
+      }
+    }
+    stage('Archive artifacts') {
+      steps {
+        archiveArtifacts(artifacts: 'bonita*.tar.gz', onlyIfSuccessful: true)
+      }
+    }
+  }
+  environment {
+    BONITA_MINOR_VERSION = '7.10'
+    DOCKER_BUILD_ARGS_FILE = "$JENKINS_HOME/build_args"
+  }
+}

@@ -1,0 +1,9 @@
+file:
+  /goss/docker_output.log:
+    exists: true
+    contains:
+    - /org.apache.catalina.startup.Catalina.*Server startup in/
+http:
+  http://localhost:8080:
+    status:
+      gt: 0

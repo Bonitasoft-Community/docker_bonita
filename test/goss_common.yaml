@@ -1,0 +1,112 @@
+group:
+  bonita:
+    # required attributes
+    exists: true
+    # optional attributes
+    gid: 1000
+
+user:
+  bonita:
+    # required attributes
+    exists: true
+    # optional attributes
+    uid: 1000
+    gid: 1000
+    groups:
+    - bonita
+    shell: /sbin/nologin
+
+file:
+  /opt/bonita:
+    # required attributes
+    exists: true
+    # optional attributes
+    owner: bonita
+    group: bonita
+    filetype: directory # file, symlink, directory
+  /opt/bonita_lic:
+    # required attributes
+    exists: true
+    # optional attributes
+    owner: bonita
+    group: bonita
+    filetype: directory # file, symlink, directory
+  /opt/custom-init.d:
+    # required attributes
+    exists: true
+    # optional attributes
+    filetype: directory # file, symlink, directory
+  /opt/files:
+    # required attributes
+    exists: true
+    # optional attributes
+    filetype: directory # file, symlink, directory
+  /opt/templates:
+    # required attributes
+    exists: true
+    # optional attributes
+    filetype: directory # file, symlink, directory
+
+command:
+  # not using port command here to support both tcp and tcp6
+  ss -ntl | grep 8080:
+    title: Checking port 8080 is listening
+    exit-status: 0
+  env | sort:
+    title: Checking environment variables
+    exit-status: 0
+    stdout:
+    - BONITA_VERSION
+  ps -eo args | grep java:
+    title: Checking that Tomcat is running
+    exit-status: 0
+    stdout:
+    - /org.apache.catalina.startup.Bootstrap start/
+  ls -1 /opt/bonita/Bonita*/setup/lib/{{getEnv "DB_VENDOR"}}*:
+    title: Checking that JDBC driver is present
+    exit-status: 0
+  grep 'db.vendor={{getEnv "DB_VENDOR"}}' /opt/bonita/Bonita*/setup/database.properties:
+    title: Checking database.properties DB_VENDOR
+    exit-status: 0
+  grep 'server.name={{getEnv "DB_HOST"}}' /opt/bonita/Bonita*/setup/database.properties:
+    title: Checking database.properties DB_HOST
+    exit-status: 0
+  grep 'server.port={{getEnv "DB_PORT"}}' /opt/bonita/Bonita*/setup/database.properties:
+    title: Checking database.properties DB_PORT
+    exit-status: 0
+  find /opt/bonita/Bonita*/setup/platform_conf/initial -name *.properties | xargs -n10 grep '^userName={{getEnv "TENANT_LOGIN"}}' | [ $(wc -l) -gt 0 ]:
+    title: Checking custom TENANT_LOGIN
+    exit-status: 0
+  find /opt/bonita/Bonita*/setup/platform_conf/initial -name *.properties | xargs -n10 grep '^userPassword={{getEnv "TENANT_PASSWORD"}}' | [ $(wc -l) -gt 0 ]:
+    title: Checking custom TENANT_PASSWORD
+    exit-status: 0
+  find /opt/bonita/Bonita*/setup/platform_conf/initial -name *.properties | xargs -n10 grep '^platformAdminUsername={{getEnv "PLATFORM_LOGIN"}}' | [ $(wc -l) -gt 0 ]:
+    title: Checking custom PLATFORM_LOGIN
+    exit-status: 0
+  find /opt/bonita/Bonita*/setup/platform_conf/initial -name *.properties | xargs -n10 grep '^platformAdminPassword={{getEnv "PLATFORM_PASSWORD"}}' | [ $(wc -l) -gt 0 ]:
+    title: Checking custom PLATFORM_PASSWORD
+    exit-status: 0
+
+file:
+  /goss/docker_output.log:
+    title: Checking that custom-init.d script is executed
+    # required attributes
+    exists: true
+    contains:
+    - 'GOSS: custom-init.d script /opt/custom-init.d/init-hello.sh!'
+
+command:
+  cat /goss/docker_output.log | tr -d '\n' | grep -c "init-1.sh.*init-2.sh.*init-13.sh.*init-hello.sh.*_init-0.sh":
+    title: Checking that custom-init.d scripts are executed in order
+    exit-status: 0
+    stdout: ["1"]
+
+http:
+  http://localhost:8080/bonita:
+    title: Checking http://localhost:8080/bonita HTTP status
+    # required attributes
+    status: 200
+    # optional attributes
+    allow-insecure: false
+    no-follow-redirects: false # Setting this to true will NOT follow redirects
+    timeout: 5000
