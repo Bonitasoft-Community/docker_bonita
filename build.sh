@@ -22,9 +22,6 @@ exit_with_usage() {
   echo "  $> ./$SCRIPT_NAME -- 7.5"
   echo "  $> ./$SCRIPT_NAME -a build_args -c -- 7.5 --build-arg key1=value1 --build-arg key2=value2"
   echo ""
-  echo "Sample docker_build_args_file:"
-  echo "BASE_URL=https://repositories.cloud.bonitasoft.com/repository/s3-raw/bonita"
-  echo "ORACLE_BASE_URL=\"-u alice:secretA https://repositories.cloud.bonitasoft.com/repository/s3-raw/oracle\""
   exit 1
 }
 
