@@ -1,0 +1,15 @@
+language: java
+jdk: openjdk11
+os: linux
+dist: xenial
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+script:
+  - ./build.sh -- 7.10
+  - .test/runTests.sh 7.10
