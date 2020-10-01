@@ -37,8 +37,8 @@ ARG BONITA_URL
 ENV BONITA_VERSION ${BONITA_VERSION:-7.10.6}
 ENV BONITA_SHA256  ${BONITA_SHA256:-aaf61a044e7a8d9ec95d2b5d0c315a6d01d9c93ba01d753fcb008e2cfbbb725f}
 
-ENV BASE_URL ${BASE_URL:-https://release.ow2.org/bonita}
-ENV BONITA_URL ${BONITA_URL:-${BASE_URL}/BonitaCommunity-${BONITA_VERSION}.zip}
+ENV BASE_URL ${BASE_URL:-https://github.com/bonitasoft/bonita-platform-releases/releases/download}
+ENV BONITA_URL ${BONITA_URL:-${BASE_URL}/${BONITA_VERSION}/BonitaCommunity-${BONITA_VERSION}.zip}
 RUN echo "Downloading Bonita from url: $BONITA_URL"
 
 # add Bonita archive to the container
